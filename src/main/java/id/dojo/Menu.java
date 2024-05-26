@@ -1,15 +1,34 @@
 package id.dojo;
 
-import jdk.jshell.execution.Util;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Menu {
-    static Scanner  scanner = new Scanner(System.in);
+    private List<Account> accounts = new ArrayList<>();
+    private List<PassHistory> passHistories = new ArrayList<>();
 
-    static String mainMenu(){
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts() {
+        this.accounts = Saver.retrieveObject();
+    }
+
+    public void setAccount(Account account){
+        accounts.add(account);
+    }
+
+    public List<PassHistory> getPassHistories() {
+        return passHistories;
+    }
+
+    public void setPassHistories() {
+        this.passHistories = Saver.retrieveHistory();
+    }
+
+    public String mainMenu(){
         Utils.menuHeader("Menu Utama");
         Utils.border();
         Utils.menuItem("Pilih","Nama Menu");
@@ -25,19 +44,18 @@ public class Menu {
         return Utils.input("Masukkan pilihan menu");
     }
 
-    static Account addAccount(){
+    public void addAccount(){
         String name = Utils.input("Masukkan nama akun");
         String userName = Utils.input("Masukkan username");
         String password = Utils.input("Masukkan password");
 
-        return new Account(name,userName,password);
+        setAccounts();
+        setAccount(new Account(name,userName,password));
     }
 
-    static void detailAccount(){
+    public void detailAccount(){
         boolean isExist = false;
         String target = Utils.input("Masukkan nama akun");
-
-        List<Account> accounts = Saver.retrieveObject();
 
         for (Account account : accounts){
             if (account.getName().equalsIgnoreCase(target)){
@@ -62,7 +80,8 @@ public class Menu {
         }
     }
 
-    static void deleteAccount(List<Account> accounts){
+    void deleteAccount(){
+        setAccounts();
         if (accounts.isEmpty()) {
             Utils.message("Tidak ada data!");
             return;
@@ -89,7 +108,8 @@ public class Menu {
 
     }
 
-    static void changePass(List<Account> accounts){
+    public void changePass(){
+        setAccounts();
         if (accounts.isEmpty()) {
             Utils.message("Tidak ada data!");
             return;
@@ -115,7 +135,7 @@ public class Menu {
 
         if (isExist){
             Saver.saveObject(newAccounts);
-            List<PassHistory> passHistories = Saver.retrieveHistory();
+            setPassHistories();
             passHistories.add(new PassHistory(accountName, oldPass, newPass));
             Saver.saveHistory(passHistories);
         }else{
@@ -124,7 +144,8 @@ public class Menu {
 
     }
 
-    static void showAccountList(List<Account> accounts){
+    void showAccountList(){
+        setAccounts();
         if (accounts.isEmpty()){
             Utils.message("Tidak ada data!");
         }else{
@@ -144,7 +165,8 @@ public class Menu {
         }
     }
 
-    static void showhistoryList(List<PassHistory> passHistories){
+    void showhistoryList(){
+        setPassHistories();
         if (passHistories.isEmpty()){
             Utils.message("Tidak ada perubahan password!");
         }else{

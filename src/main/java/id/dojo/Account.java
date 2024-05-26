@@ -7,8 +7,6 @@ public class Account implements Serializable {
     private String userName;
     private String password;
 
-    public Account(){};
-
     public Account(String name, String userName, String password){
         this.name = name;
         this.userName = userName;

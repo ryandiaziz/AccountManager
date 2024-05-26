@@ -1,46 +1,34 @@
 package id.dojo;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
     public static void main(String[] args) {
-        List<Account> accounts;
-        List<PassHistory> passHistories;
+        Menu menu = new Menu();
         Saver.fileName = "/home/ryan/Projects/AccountManager/src/main/resources/account.txt";
         Saver.fileHistory = "/home/ryan/Projects/AccountManager/src/main/resources/pass_history.txt";
         boolean isRunning = true;
 
         while (isRunning){
-            String item = Menu.mainMenu();
+            String item = menu.mainMenu();
 
             switch (item.toLowerCase()){
                 case "1":
-                    accounts = Saver.retrieveObject();
-                    Menu.showAccountList(accounts);
+                    menu.showAccountList();
                     break;
                 case "2":
-                    Menu.detailAccount();
+                    menu.detailAccount();
                     break;
                 case "3":
-                    accounts = Saver.retrieveObject();
-                    Account newAccount = Menu.addAccount();
-                    accounts.add(newAccount);
-
-                    Saver.saveObject(accounts);
+                    menu.addAccount();
+                    Saver.saveObject(menu.getAccounts());
                     break;
                 case "4":
-                    accounts = Saver.retrieveObject();
-                    Menu.changePass(accounts);
+                    menu.changePass();
                     break;
                 case "5":
-                    passHistories = Saver.retrieveHistory();
-                    Menu.showhistoryList(passHistories);
+                    menu.showhistoryList();
                     break;
                 case "6":
-                    accounts = Saver.retrieveObject();
-                    Menu.deleteAccount(accounts);
+                    menu.deleteAccount();
                     break;
                 case "x":
                     isRunning = false;
